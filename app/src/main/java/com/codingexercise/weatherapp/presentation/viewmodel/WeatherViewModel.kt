@@ -28,21 +28,11 @@ class WeatherViewModel @Inject constructor(
     fun fetchWeather(city: String) {
         viewModelScope.launch {
             try {
-                _error.value = "" // reset error before fetch
+                _error.value = ""
                 _forecastList.value = getWeatherForecastUseCase(city)
                 _navigateToList.value = true
 
-            } catch (e: HttpException) {
-                if (e.code() == 400 || e.code() == 404 || e.code() == 500 || e.code() == 404) {
-                    _error.value = "Bad request: Invalid city name or parameters."
-                    _navigateToList.value = false
-
-                } else {
-                    _error.value = "Error ${e.code()}: ${e.message()}"
-                    _navigateToList.value = false
-
-                }
-            } catch (e: Exception) {
+            }  catch (e: Exception) {
                 _error.value = e.localizedMessage ?: "Unknown error"
                 _navigateToList.value = false
 
